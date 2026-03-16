@@ -13484,6 +13484,10 @@
 /area/station/maintenance/east)
 "aWC" = (
 /obj/table/wood/round/auto,
+/obj/item/clothing/gloves/yellow/unsulated{
+	pixel_x = -6;
+	pixel_y = 11
+	},
 /obj/item/handcuffs{
 	pixel_x = 3;
 	pixel_y = 5
