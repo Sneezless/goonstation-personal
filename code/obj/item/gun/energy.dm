@@ -2539,3 +2539,88 @@ TYPEINFO(/obj/item/gun/energy/lasershotgun)
 		AddComponent(/datum/component/holdertargeting/windup, 1 SECOND)
 		AddComponent(/datum/component/holdertargeting/sniper_scope, 8, 0, /datum/overlayComposition/sniper_scope/resonator, 'sound/machines/found.ogg')
 		..()
+
+/obj/item/gun/energy/egun/big/
+	name = "energy gun"
+	icon_state = "energy"
+	cell_type = /obj/item/ammo/power_cell/med_plus_power
+	desc = "The Five Points Armory Energy Gun, Mega Edition. Triple  emitters with switchable fire modes, for stun bolts or lethal laser fire or a huge motherfuckin laser or a huger motherfuckiner laserer."
+	item_state = "egun"
+	force = 5
+	var/nojobreward = 0 //used to stop people from scanning it and then getting both a lawbringer/sabre AND an egun.
+	muzzle_flash = "muzzle_flash_elec"
+	uses_charge_overlay = TRUE
+	charge_icon_state = "energystun"
+
+	New()
+		set_current_projectile(new/datum/projectile/energy_bolt)
+		projectiles = list(current_projectile,new/datum/projectile/laser,new/datum/projectile/laser/heavy,new/datum/projectile/laser/cruiser)
+		RegisterSignal(src, COMSIG_ATOM_ANALYZE, PROC_REF(noreward))
+		src.verbs -= /obj/item/gun/energy/egun/verb/claim_lawbringer
+		src.verbs -= /obj/item/gun/energy/egun/verb/claim_sword
+		..()
+	update_icon()
+		if (current_projectile.type == /datum/projectile/laser)
+			charge_icon_state = "energykill"
+			muzzle_flash = "muzzle_flash_laser"
+			item_state = "egun-kill"
+		else if (current_projectile.type == /datum/projectile/energy_bolt)
+			charge_icon_state = "energystun"
+			muzzle_flash = "muzzle_flash_elec"
+			item_state = "egun"
+		else if (current_projectile.type == /datum/projectile/laser/heavy)
+			charge_icon_state = "energykill"
+			muzzle_flash = "muzzle_flash_laser"
+			item_state = "egun-kill"
+		else if (current_projectile.type == /datum/projectile/laser/cruiser)
+			charge_icon_state = "energykill"
+			muzzle_flash = "muzzle_flash_laser"
+			item_state = "egun-kill"
+		..()
+	attack_self(var/mob/M)
+		..()
+		UpdateIcon()
+		M.update_inhands()
+
+	pickup(mob/user)
+		. = ..()
+		if (user.mind?.assigned_role == "Head of Security")
+			src.verbs |= /obj/item/gun/energy/egun/verb/claim_lawbringer
+		else if (user.mind?.assigned_role == "Captain")
+			src.verbs |= /obj/item/gun/energy/egun/verb/claim_sword
+
+	dropped(mob/user)
+		. = ..()
+		src.verbs -= /obj/item/gun/energy/egun/verb/claim_lawbringer
+		src.verbs -= /obj/item/gun/energy/egun/verb/claim_sword
+
+	verb/claim_lawbringer()
+		set src in usr
+		set category = "Local"
+		set name = "Convert to Lawbringer"
+
+		var/datum/jobXpReward/reward = global.xpRewards["The Lawbringer"]
+		reward.try_claim(usr, FALSE)
+
+	verb/claim_sword()
+		set src in usr
+		set category = "Local"
+		set name = "Convert to Sabre"
+
+		var/datum/jobXpReward/reward = global.xpRewards["Commander's Sabre"]
+		reward.try_claim(usr, FALSE)
+
+	proc/noreward()
+		src.nojobreward = 1
+
+	captain
+		desc = "The Five Points Armory Energy Gun. Double emitters with switchable fire modes, for stun bolts or lethal laser fire. Decorated to match standard NT captain attire."
+		icon_state = "energy-cap"
+
+	head_of_security
+		desc = "The Five Points Armory Energy Gun. Double emitters with switchable fire modes, for stun bolts or lethal laser fire. 'HOS' is engraved in the side."
+		icon_state = "energy-hos"
+
+		New()
+			. = ..()
+			src.verbs -= /obj/item/gun/energy/egun/verb/claim_sword
