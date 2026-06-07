@@ -2547,8 +2547,6 @@ TYPEINFO(/obj/item/gun/energy/lasershotgun)
 	desc = "The Five Points Armory Energy Gun, Mega Edition. Triple  emitters with switchable fire modes, for stun bolts or lethal laser fire or a huge motherfuckin laser or a huger motherfuckiner laserer."
 	item_state = "egun"
 	force = 5
-	var/nojobreward = 0 //used to stop people from scanning it and then getting both a lawbringer/sabre AND an egun.
-	muzzle_flash = "muzzle_flash_elec"
 	uses_charge_overlay = TRUE
 	charge_icon_state = "energystun"
 
@@ -2594,31 +2592,12 @@ TYPEINFO(/obj/item/gun/energy/lasershotgun)
 		src.verbs -= /obj/item/gun/energy/egun/verb/claim_lawbringer
 		src.verbs -= /obj/item/gun/energy/egun/verb/claim_sword
 
-	verb/claim_lawbringer()
-		set src in usr
-		set category = "Local"
-		set name = "Convert to Lawbringer"
-
-		var/datum/jobXpReward/reward = global.xpRewards["The Lawbringer"]
-		reward.try_claim(usr, FALSE)
-
-	verb/claim_sword()
-		set src in usr
-		set category = "Local"
-		set name = "Convert to Sabre"
-
-		var/datum/jobXpReward/reward = global.xpRewards["Commander's Sabre"]
-		reward.try_claim(usr, FALSE)
-
-	proc/noreward()
-		src.nojobreward = 1
-
 	captain
-		desc = "The Five Points Armory Energy Gun. Double emitters with switchable fire modes, for stun bolts or lethal laser fire. Decorated to match standard NT captain attire."
+		desc = "The Five Points Armory Energy Gun, Mega Edition. Triple  emitters with switchable fire modes, for stun bolts or lethal laser fire or a huge motherfuckin laser or a huger motherfuckiner laserer. Decorated to match standard NT captain attire."
 		icon_state = "energy-cap"
 
 	head_of_security
-		desc = "The Five Points Armory Energy Gun. Double emitters with switchable fire modes, for stun bolts or lethal laser fire. 'HOS' is engraved in the side."
+		desc = "The Five Points Armory Energy Gun, Mega Edition. Triple  emitters with switchable fire modes, for stun bolts or lethal laser fire or a huge motherfuckin laser or a huger motherfuckiner laserer. 'HOS' is engraved in the side."
 		icon_state = "energy-hos"
 
 		New()
