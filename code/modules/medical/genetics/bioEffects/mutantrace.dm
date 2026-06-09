@@ -61,6 +61,8 @@
 	msgGain = "You feel kinda thin."
 	msgLose = "You've put on a bit more weight."
 	icon_state  = "skeleton"
+	// mimic parts of a genetic power so we can coast off that intrastructure
+	var/ability_path = /datum/targetable/geneticsAbility/remove_head
 
 	OnAdd()
 		. = ..()
@@ -72,7 +74,9 @@
 
 	onPowerChange(oldval, newval)
 		if (newval >= 2)
-			src.owner.abilityHolder?.addAbility(/datum/targetable/geneticsAbility/remove_head)
+			var/datum/targetable/geneticsAbility/AB = src.owner.abilityHolder?.addAbility(/datum/targetable/geneticsAbility/remove_head)
+			AB.owner = src.owner
+			AB.linked_power = src
 		else
 			src.owner.abilityHolder?.removeAbility(/datum/targetable/geneticsAbility/remove_head)
 
@@ -183,6 +187,15 @@
 	curable_by_mutadone = 0
 	reclaim_fail = 100
 	icon_state  = "monkey"
+
+	gorilla //reward if someone gets a gorilla in a scanner somehow
+		id = "seamonkey-loot"
+		scanner_visibility = 1
+		can_research = 1
+		can_make_injector = 1
+		can_copy = 1
+		can_reclaim = 1
+		can_scramble = 1
 
 /datum/bioEffect/mutantrace/cat
 	name = "Feline Genetics"

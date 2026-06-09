@@ -1,6 +1,7 @@
 /obj/storage/secure/closet
 	name = "secure locker"
 	desc = "A card-locked storage locker."
+	icon = 'icons/obj/storage/locker.dmi'
 	object_flags = NO_GHOSTCRITTER
 	soundproofing = SOUNDPROOFING_INSIDE
 	can_flip_bust = 1
@@ -275,6 +276,7 @@
 	name = "\improper Medical Director's locker"
 	req_access = list(access_medical_director)
 	spawn_contents = list(/obj/item/disk/data/floppy/manudrive/ai,
+	/obj/item/disk/data/floppy/manudrive/gene_booth,
 	/obj/item/storage/box/clothing/medical_director,
 	/obj/item/clothing/shoes/brown,
 	/obj/item/gun/implanter,
@@ -444,6 +446,7 @@
 	reinforced = TRUE
 	bolted = TRUE
 	spawn_contents = list(/obj/item/item_box/contraband)
+	radiation_protection = 20
 
 // Old Mushroom-era feature I fixed up (Convair880).
 /obj/storage/secure/closet/brig_automatic
@@ -952,6 +955,7 @@
 	open_sound = 'sound/misc/fridge_open.ogg'
 	close_sound = 'sound/misc/fridge_close.ogg'
 	volume = 80
+	radiation_protection = 20
 
 /obj/storage/secure/closet/fridge/opened
 	New()
