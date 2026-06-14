@@ -108,9 +108,13 @@
 	proc/return_to_owner()
 		if (controller != null)
 			if(!controller.loc)
-				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared."))
+				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared! \
+					The scuttlebot shuts down with a sad boop."))
+				src.ghostize()
 			else if (!isalive(controller))
-				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead! The scuttlebot's advanced AI takes over and retains your conscience."))
+				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead! \
+					The scuttlebot shuts down with a sad boop."))
+				src.ghostize()
 			else
 				src.mind.transfer_to(controller)
 			controller.network_device = null
