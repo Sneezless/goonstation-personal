@@ -126,7 +126,7 @@
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead!"))
 			var/mob/dead/observer/spawned_ghost = src.ghostize()
 			if (spawned_ghost)
-				spawned_ghost.corpse = null
+				spawned_ghost.corpse = src.controller
 			src.controller = null
 		else
 			src.mind.transfer_to(src.controller)
