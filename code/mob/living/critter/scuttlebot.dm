@@ -108,7 +108,7 @@
 	proc/return_to_owner()
 		if (src.controller == null)
 			return
-		if (QDELETED(src.controller) || src.controller.disposed)
+		else if (QDELETED(src.controller) || src.controller.disposed)
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
 			src.ghostize()
 			src.controller = null
@@ -116,7 +116,7 @@
 		else if (!src.controller.loc)
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
 			src.ghostize()
-		else if (!isalive(src.controller))
+		else if (!isalive(src.controller) && !isunconscious(src.controller))
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead!"))
 			src.ghostize()
 		else
