@@ -105,24 +105,33 @@
 			playsound(src.loc, 'sound/impact_sounds/Machinery_Break_1.ogg', 40, 1)
 			make_cleanable(/obj/decal/cleanable/oil,src.loc)
 
+	// Modifies the scuttlebot return_to_owner proc to properly handle edge cases, and updates various pieces of scuttlebot code to use this proc instead of their own code.
 	proc/return_to_owner()
 		if (src.controller == null)
 			return
 		else if (QDELETED(src.controller) || src.controller.disposed)
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
-			src.ghostize()
+			var/mob/dead/observer/spawned_ghost = src.ghostize()
+			if (spawned_ghost)
+				spawned_ghost.corpse = null
 			src.controller = null
 			return
 		else if (!src.controller.loc)
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
-			src.ghostize()
+			var/mob/dead/observer/spawned_ghost = src.ghostize()
+			if (spawned_ghost)
+				spawned_ghost.corpse = null
+			src.controller = null
 		else if (!isalive(src.controller) && !isunconscious(src.controller))
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead!"))
-			src.ghostize()
+			var/mob/dead/observer/spawned_ghost = src.ghostize()
+			if (spawned_ghost)
+				spawned_ghost.corpse = null
+			src.controller = null
 		else
 			src.mind.transfer_to(src.controller)
-		src.controller.network_device = null
-		src.controller = null
+			src.controller.network_device = null
+			src.controller = null
 
 	proc/make_inspector()
 		icon_state = "scuttlebot_inspector"
