@@ -85,7 +85,7 @@
 	death(var/gibbed)
 		if (controller != null)//Lets put the person back in their body first to avoid death messages
 			if (!controller.mind)
-				src.mind.transfer_to(controller)
+				src.return_to_owner()
 			else
 				boutput(src, SPAN_ALERT("Your conscience tries to reintegrate your body, but its already possessed by something!"))
 
@@ -106,19 +106,23 @@
 			make_cleanable(/obj/decal/cleanable/oil,src.loc)
 
 	proc/return_to_owner()
-		if (controller != null)
-			if(!controller.loc)
-				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared! \
-					The scuttlebot shuts down with a sad boop."))
-				src.ghostize()
-			else if (!isalive(controller))
-				boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead! \
-					The scuttlebot shuts down with a sad boop."))
-				src.ghostize()
-			else
-				src.mind.transfer_to(controller)
-			controller.network_device = null
-			controller = null
+		if (src.controller == null)
+			return
+		if (QDELETED(src.controller) || src.controller.disposed)
+			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
+			src.ghostize()
+			src.controller = null
+			return
+		else if(!src.controller.loc)
+			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
+			src.ghostize()
+		else if (!isalive(src.controller))
+			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. Your real body is dead!"))
+			src.ghostize()
+		else
+			src.mind.transfer_to(src.controller)
+		src.controller.network_device = null
+		src.controller = null
 
 	proc/make_inspector()
 		icon_state = "scuttlebot_inspector"
