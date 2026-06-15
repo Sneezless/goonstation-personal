@@ -113,7 +113,7 @@
 			src.ghostize()
 			src.controller = null
 			return
-		else if(!src.controller.loc)
+		else if (!src.controller.loc)
 			boutput(src, SPAN_ALERT("A horrible sense of dread looms over you. You feel like your body has disappeared!"))
 			src.ghostize()
 		else if (!isalive(src.controller))
