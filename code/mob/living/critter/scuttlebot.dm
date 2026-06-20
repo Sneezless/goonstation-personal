@@ -107,34 +107,34 @@
 
 	// Modifies the scuttlebot return_to_owner proc to properly handle edge cases, and updates various pieces of scuttlebot code to use this proc instead of their own code.
 	proc/return_to_owner()
-	if (!src.controller)
-		return
+		if (!src.controller)
+			return
 
-	var/ghostize_owner = FALSE
-	var/mob/living/corpse = null
-	var/message = null
+		var/ghostize_owner = FALSE
+		var/mob/living/corpse = null
+		var/message = null
 
-	if (QDELETED(src.controller) || src.controller.disposed || !src.controller.loc)
-		ghostize_owner = TRUE
-		message = "A horrible sense of dread looms over you. You feel like your body has disappeared!"
-	else if (!isalive(src.controller) && !isunconscious(src.controller))
-		ghostize_owner = TRUE
-		corpse = src.controller
-		message = "A horrible sense of dread looms over you. Your real body is dead!"
+		if (QDELETED(src.controller) || src.controller.disposed || !src.controller.loc)
+			ghostize_owner = TRUE
+			message = "A horrible sense of dread looms over you. You feel like your body has disappeared!"
+		else if (!isalive(src.controller) && !isunconscious(src.controller))
+			ghostize_owner = TRUE
+			corpse = src.controller
+			message = "A horrible sense of dread looms over you. Your real body is dead!"
 
-	if (ghostize_owner)
-		boutput(src, SPAN_ALERT(message))
+		if (ghostize_owner)
+			boutput(src, SPAN_ALERT(message))
 
-		var/mob/dead/observer/spawned_ghost = src.ghostize()
-		if (spawned_ghost)
-			spawned_ghost.corpse = corpse
+			var/mob/dead/observer/spawned_ghost = src.ghostize()
+			if (spawned_ghost)
+				spawned_ghost.corpse = corpse
 
+			src.controller = null
+			return
+
+		src.mind.transfer_to(src.controller)
+		src.controller.network_device = null
 		src.controller = null
-		return
-
-	src.mind.transfer_to(src.controller)
-	src.controller.network_device = null
-	src.controller = null
 
 	proc/make_inspector()
 		icon_state = "scuttlebot_inspector"
